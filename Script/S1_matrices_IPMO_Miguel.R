@@ -2,10 +2,9 @@
 # Authors: Miguel Vinagre de Frutos, Gabriella Lima Tabet Cruz, Cecilia Siliansky de Andreazzi
 # Date: July 07, 2025
 # Description: Generates and analyses three matrices among mammal hosts: 
-# (1) Gower distance based on traits or shared parasites, 
-# (2) Jaccard distance based on traits or shared parasites, 
-# (3) phylogenetic distance, and 
-# (4) similarity based on shared parasites.
+# (1) Gower distance based on traits, 
+# (2) Jaccard distance based on shared parasites, and
+# (3) phylogenetic distance.
 
 # LOAD LIBRARIES
 library(tidyverse)    # Data manipulation and visualization
@@ -55,7 +54,6 @@ str(interaction_traits)
 
 
 # HOST TRAIT MATRIX
-
 Tr_data <- interaction_traits %>% 
   distinct(HostSpecies, BodyMass, MainGuild, ForStrat, Activity) # Include all traits to be used in final matrix
 
@@ -126,7 +124,6 @@ print(vif_values)
 
 
 # HOST–PARASITE INTERACTION MATRIX
-
 HxP_data <- interaction_traits %>% 
   distinct(HostSpecies, ParSpecies)
 
@@ -138,7 +135,7 @@ M_HxP <- HxP_data %>%
   mutate(value = 1) %>%
   pivot_wider(names_from = ParSpecies, values_from = value, values_fill = 0)
 
-# Optionally set row names and remove species column
+# Set row names and remove species column
 M_HxP <- M_HxP %>% column_to_rownames("HostSpecies")
 
 # Print matrix
@@ -232,7 +229,6 @@ print(reg_both)
 
 
 # PLOT CORRELATIONS
-
 corrdat <- data.frame(
   Parasites = as.vector(as.dist(D_jaccard_parasites)),
   Traits    = as.vector(as.dist(D_gower_traits)),
